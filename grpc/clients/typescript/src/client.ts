@@ -2,11 +2,9 @@ import {GreeterClient} from "./generated/proto/src/main/proto/ServiceServiceClie
 import {HelloRequest, SpellRequest} from "./generated/proto/src/main/proto/service_pb";
 import {Logger} from "./platformApi";
 
-export async function grpcCall(logger: Logger) {
+export async function grpcCall(name: string, logger: Logger) {
     const port = 8088
     const greeter = new GreeterClient('http://localhost:' + port, null, null);
-
-    const name = 'typescript'
 
     const helloRequest = new HelloRequest();
     helloRequest.setName(name);
@@ -15,16 +13,16 @@ export async function grpcCall(logger: Logger) {
     logger.log(helloResponse.getMessage())
 
     const spellRequest = new SpellRequest();
-    spellRequest.setText('typescript');
+    spellRequest.setText(name);
 
     await new Promise((resolve) => {
         const spellResponse = greeter.spell(spellRequest);
         spellResponse.on('data', (reply)=>{
-            logger.log(reply.getMessage())
+            logger.log('Received: ' + reply.getMessage())
         })
         spellResponse.on('end', ()=>{
             logger.log('Done!')
-            resolve(undefined)
+            resolve(null)
         })
     })
 }

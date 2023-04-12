@@ -13,5 +13,5 @@ class WebLogger implements Logger {
 
 window.onload = (e) => {
     const paragraph = document.getElementById("log")!!
-    grpcCall(new WebLogger(paragraph))
+    grpcCall('web', new WebLogger(paragraph))
 }

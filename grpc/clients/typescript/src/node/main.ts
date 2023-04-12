@@ -9,4 +9,4 @@ class NodeLogger implements Logger {
         console.log(message)
     }
 }
-Client.grpcCall(new NodeLogger())
+Client.grpcCall('node', new NodeLogger())
