@@ -16,6 +16,17 @@ tasks.register<Exec>("buildNode") {
     commandLine("yarn", "compile:node")
 }
 
+tasks.register<Exec>("watchWeb") {
+    group = "build"
+    commandLine("yarn", "watch:web")
+}
+
+tasks.register<Exec>("watchNode") {
+    group = "build"
+    commandLine("yarn", "watch:node")
+}
+
+
 tasks.register("build") {
     group = "build"
     dependsOn( "install", "generateProto", "buildWeb", "buildNode")

@@ -10,10 +10,10 @@ const config = {
   target: 'web',
   mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 
-  entry: './src/client.ts',
+  entry: './src/web/main.ts',
   output: {
     path: path.resolve(__dirname, 'build/web'),
-    filename: 'client.js',
+    filename: 'main.js',
     libraryTarget: 'var',
     library: 'GrpcTest',
     clean: true

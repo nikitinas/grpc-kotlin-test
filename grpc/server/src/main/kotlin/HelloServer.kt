@@ -53,7 +53,7 @@ class HelloServer(private val port: Int) {
         override suspend fun helloCall(request: HelloRequest): Reply {
             println("Received hello request from ${request.name}")
             return reply {
-                message = "Hello, " + request.name
+                message = "Hello, " + request.name + "!"
             }
         }
 
