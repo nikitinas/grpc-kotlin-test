@@ -1,3 +1,3 @@
 
 rootProject.name = "grpc-kotlin-test"
-include(":grpc:server", ":grpc:proto", ":grpc:stub", ":grpc:client")
+include(":grpc:server", ":grpc:protocol", ":grpc:kotlin-stub", ":grpc:clients:kotlin", ":grpc:clients:typescript")

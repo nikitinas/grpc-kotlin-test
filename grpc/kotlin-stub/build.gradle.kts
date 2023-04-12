@@ -20,7 +20,7 @@ val grpcKotlinVersion by properties
 val coroutinesVersion by properties
 
 dependencies {
-    protobuf(project(":grpc:proto"))
+    protobuf(project(":grpc:protocol"))
 
     api("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     api("io.grpc:grpc-protobuf:$grpcVersion")
@@ -59,4 +59,8 @@ protobuf {
             }
         }
     }
+}
+
+tasks.named("build") {
+    dependsOn("generateProto")
 }

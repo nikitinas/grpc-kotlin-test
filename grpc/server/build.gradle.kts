@@ -11,7 +11,7 @@ val grpcKotlinVersion by properties
 val coroutinesVersion by properties
 
 dependencies {
-    implementation(project(":grpc:stub"))
+    implementation(project(":grpc:kotlin-stub"))
     api(kotlin("stdlib-jdk8"))
     runtimeOnly("io.grpc:grpc-netty:$grpcVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$coroutinesVersion")
@@ -25,19 +25,20 @@ application {
     mainClass.set("MainKt")
 }
 
-tasks.register<JavaExec>("HelloWorldServer") {
+tasks.register<JavaExec>("KotlinServer") {
     dependsOn("classes")
+    group = "run"
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("io.grpc.examples.helloworld.HelloWorldServerKt")
+    mainClass.set("nikitinas.grpc.hello.HelloServerKt")
 }
 
-val helloWorldServerStartScripts = tasks.register<CreateStartScripts>("helloWorldServerStartScripts") {
-    mainClass.set("io.grpc.examples.helloworld.HelloWorldServerKt")
-    applicationName = "hello-world-server"
+val helloStartScripts = tasks.register<CreateStartScripts>("helloStartScripts") {
+    mainClass.set("nikitinas.grpc.hello.HelloServerKt")
+    applicationName = "hello-server"
     outputDir = tasks.named<CreateStartScripts>("startScripts").get().outputDir
     classpath = tasks.named<CreateStartScripts>("startScripts").get().classpath
 }
 
 tasks.named("startScripts") {
-    dependsOn(helloWorldServerStartScripts)
+    dependsOn(helloStartScripts)
 }

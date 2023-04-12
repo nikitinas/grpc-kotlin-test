@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package io.grpc.examples.helloworld
+package nikitinas.grpc.hello
 
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
-import io.grpc.examples.helloworld.GreeterGrpcKt.GreeterCoroutineStub
 import java.io.Closeable
 import java.util.concurrent.TimeUnit
 
-class HelloWorldClient(private val channel: ManagedChannel) : Closeable {
-    private val stub: GreeterCoroutineStub = GreeterCoroutineStub(channel)
+class HelloClient(private val channel: ManagedChannel) : Closeable {
+    private val stub: GreeterGrpcKt.GreeterCoroutineStub = GreeterGrpcKt.GreeterCoroutineStub(channel)
 
     suspend fun greet(name: String) {
         val request = helloRequest { this.name = name }
-        val response = stub.sayHello(request)
+        val response = stub.helloCall(request)
+        println(response.message)
+    }
+
+    suspend fun spell(text: String) {
+        val request = spellRequest { this.text = text }
+        val response = stub.spell(request)
         response.collect {
             println("Received: ${it.message}")
         }
@@ -38,17 +43,16 @@ class HelloWorldClient(private val channel: ManagedChannel) : Closeable {
     }
 }
 
-/**
- * Greeter, uses first argument as name to greet if present;
- * greets "world" otherwise.
- */
-suspend fun main(args: Array<String>) {
+suspend fun main() {
     val port = 50051
 
     val channel = ManagedChannelBuilder.forAddress("localhost", port).usePlaintext().build()
 
-    val client = HelloWorldClient(channel)
+    val name = "kotlin"
 
-    val user = args.singleOrNull() ?: "world"
-    client.greet(user)
+    HelloClient(channel).use {
+        it.greet(name)
+        it.spell(name)
+        println("Done!")
+    }
 }

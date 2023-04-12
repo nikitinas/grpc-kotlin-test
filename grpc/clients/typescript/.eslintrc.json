@@ -1,0 +1,48 @@
+{// import/no-extraneous-dependencies
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "@typescript-eslint/naming-convention": "warn",
+        "@typescript-eslint/semi": "warn",
+        "curly": "warn",
+        "eqeqeq": "warn",
+        "no-throw-literal": "warn",
+        "semi": "off",
+        "import/prefer-default-export": "off",
+        "class-methods-use-this": "off",
+        "@typescript-eslint/comma-dangle": "off",
+        "no-void": "off",
+        "arrow-parens": "off",
+        "no-param-reassign": "off",
+        "max-len": "off",
+        "no-plusplus": "off",
+        "no-restricted-syntax": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "linebreak-style": "off",
+        "@typescript-eslint/no-use-before-define": ["error", {"functions": false}],
+        "no-await-in-loop": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "no-underscore-dangle": ["error", {"allowAfterThis": true}]
+    },
+    "ignorePatterns": [
+        "out",
+        "dist",
+        "**/*.d.ts"
+    ],
+    "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base"
+    ]
+}

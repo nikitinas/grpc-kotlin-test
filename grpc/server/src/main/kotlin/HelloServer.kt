@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package io.grpc.examples.helloworld
+package nikitinas.grpc.hello
 
 import io.grpc.Server
 import io.grpc.ServerBuilder
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class HelloWorldServer(private val port: Int) {
-    val server: Server = ServerBuilder
+class HelloServer(private val port: Int) {
+
+    private val server: Server = ServerBuilder
         .forPort(port)
-        .addService(HelloWorldService())
+        .addService(HelloService())
         .build()
 
     fun start() {
@@ -33,7 +35,7 @@ class HelloWorldServer(private val port: Int) {
         Runtime.getRuntime().addShutdownHook(
             Thread {
                 println("*** shutting down gRPC server since JVM is shutting down")
-                this@HelloWorldServer.stop()
+                this@HelloServer.stop()
                 println("*** server shut down")
             }
         )
@@ -47,23 +49,30 @@ class HelloWorldServer(private val port: Int) {
         server.awaitTermination()
     }
 
-    internal class HelloWorldService : GreeterGrpcKt.GreeterCoroutineImplBase() {
-        override fun sayHello(request: HelloRequest) = flow {
-            println("Received request from ${request.name}")
-            repeat(5) { id ->
-                val reply = helloReply {
-                    message = "Hello$id ${request.name}"
+    internal class HelloService : GreeterGrpcKt.GreeterCoroutineImplBase() {
+        override suspend fun helloCall(request: HelloRequest): Reply {
+            println("Received hello request from ${request.name}")
+            return reply {
+                message = "Hello, " + request.name
+            }
+        }
+
+        override fun spell(request: SpellRequest): Flow<Reply> = flow {
+            println("Received spell request for '${request.text}'")
+            request.text.forEach { c ->
+                val reply = reply {
+                    message = c.uppercase()
                 }
                 emit(reply)
-                delay(3000)
+                delay(1000)
             }
         }
     }
 }
 
 fun main() {
-    val port = System.getenv("PORT")?.toInt() ?: 50051
-    val server = HelloWorldServer(port)
+    val port = 50051
+    val server = HelloServer(port)
     server.start()
     server.blockUntilShutdown()
 }
