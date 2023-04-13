@@ -7,6 +7,7 @@ plugins {
 
 tasks.register<BashExec>("generateProto") {
     commandLine("generateProto.sh")
+    dependsOn("yarn")
 }
 
 tasks.register<YarnTask>("buildWeb") {
@@ -33,7 +34,7 @@ tasks.register<YarnTask>("watchNode") {
 
 tasks.register("build") {
     group = "build"
-    dependsOn( "yarn", "generateProto", "buildWeb", "buildNode")
+    dependsOn("buildWeb", "buildNode")
 }
 
 tasks.register<BashExec>("EnvoyProxy") {
