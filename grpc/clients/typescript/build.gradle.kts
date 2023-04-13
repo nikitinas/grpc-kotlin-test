@@ -46,7 +46,7 @@ tasks.register<Exec>("NodeClient") {
     commandLine("node", ".")
 }
 
-tasks.register<Exec>("WebClient") {
+tasks.register<OpenBrowser>("WebClient") {
     group = "run"
-    commandLine("open", "./index.html")
+    commandLine("./index.html")
 }
