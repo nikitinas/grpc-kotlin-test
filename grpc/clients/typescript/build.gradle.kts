@@ -39,7 +39,7 @@ tasks.register("build") {
 
 tasks.register<BashExec>("EnvoyProxy") {
     group = "run"
-    commandLine("runEnvoy.sh")
+    commandLine("envoy.sh")
 }
 
 tasks.register<Exec>("NodeClient") {
