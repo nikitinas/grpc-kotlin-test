@@ -7,7 +7,7 @@ val grpcVersion by properties
 val coroutinesVersion by properties
 
 dependencies {
-    implementation(project(":grpc:kotlin-stub"))
+    implementation(project(":kotlin-stub"))
     runtimeOnly("io.grpc:grpc-netty:$grpcVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$coroutinesVersion")
 }
