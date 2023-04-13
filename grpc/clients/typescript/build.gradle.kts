@@ -33,7 +33,7 @@ tasks.register<YarnTask>("watchNode") {
 
 tasks.register("build") {
     group = "build"
-    dependsOn( "install", "generateProto", "buildWeb", "buildNode")
+    dependsOn( "yarn", "generateProto", "buildWeb", "buildNode")
 }
 
 tasks.register<BashExec>("EnvoyProxy") {
