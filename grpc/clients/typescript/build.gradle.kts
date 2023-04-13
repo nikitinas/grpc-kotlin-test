@@ -1,40 +1,44 @@
-tasks.register<Exec>("install") {
-    commandLine("yarn")
+import nikitinas.grpc.hello.gradle.tasks.*
+import com.github.gradle.node.yarn.task.*
+
+plugins {
+    id("com.github.node-gradle.node") version "3.5.1"
 }
 
-tasks.register<Exec>("generateProto") {
-    commandLine("sh", "generateProto.sh")
+tasks.register<BashExec>("generateProto") {
+    commandLine("generateProto.sh")
 }
 
-tasks.register<Exec>("buildWeb") {
+tasks.register<YarnTask>("buildWeb") {
     group = "build"
-    commandLine("yarn", "compile:web")
+    args.add("compile:web")
+    dependsOn("generateProto")
 }
 
-tasks.register<Exec>("buildNode") {
+tasks.register<YarnTask>("buildNode") {
     group = "build"
-    commandLine("yarn", "compile:node")
+    args.add("compile:node")
+    dependsOn("generateProto")
 }
 
-tasks.register<Exec>("watchWeb") {
+tasks.register<YarnTask>("watchWeb") {
     group = "build"
-    commandLine("yarn", "watch:web")
+    args.add("watch:web")
 }
 
-tasks.register<Exec>("watchNode") {
+tasks.register<YarnTask>("watchNode") {
     group = "build"
-    commandLine("yarn", "watch:node")
+    args.add("watch:node")
 }
-
 
 tasks.register("build") {
     group = "build"
     dependsOn( "install", "generateProto", "buildWeb", "buildNode")
 }
 
-tasks.register<Exec>("EnvoyProxy") {
+tasks.register<BashExec>("EnvoyProxy") {
     group = "run"
-    commandLine("sh", "runEnvoy.sh")
+    commandLine("runEnvoy.sh")
 }
 
 tasks.register<Exec>("NodeClient") {
