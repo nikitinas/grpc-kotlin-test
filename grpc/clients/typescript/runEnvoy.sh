@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-envoy --log-path envoy.log -l info -c envoy.yaml
+docker build -t envoy:v1 .
+docker stop envoy
+docker rm envoy
+docker run -d --name envoy -p 9902:9902 -p 8088:8088 envoy:v1
