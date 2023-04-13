@@ -1,5 +1,5 @@
-import {GreeterClient} from "./generated/proto/src/main/proto/ServiceServiceClientPb";
-import {HelloRequest, SpellRequest} from "./generated/proto/src/main/proto/service_pb";
+import {GreeterClient} from "./generated/protocol/src/main/proto/ServiceServiceClientPb";
+import {HelloRequest, SpellRequest} from "./generated/protocol/src/main/proto/service_pb";
 import {Logger} from "./platformApi";
 
 export async function grpcCall(name: string, logger: Logger) {
