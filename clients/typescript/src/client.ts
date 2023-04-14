@@ -1,6 +1,7 @@
 import {GreeterClient} from "./generated/protocol/src/main/proto/ServiceServiceClientPb";
 import {HelloRequest, SpellRequest} from "./generated/protocol/src/main/proto/service_pb";
 import {Logger} from "./platformApi";
+import {RpcError} from "grpc-web";
 
 export async function grpcCall(name: string, logger: Logger) {
     const port = 8088
@@ -9,20 +10,25 @@ export async function grpcCall(name: string, logger: Logger) {
     const helloRequest = new HelloRequest();
     helloRequest.setName(name);
 
-    const helloResponse = await greeter.helloCall(helloRequest, null);
-    logger.log(helloResponse.getMessage())
+    try {
+        const helloResponse = await greeter.helloCall(helloRequest, null);
+        logger.log(helloResponse.getMessage())
 
-    const spellRequest = new SpellRequest();
-    spellRequest.setText(name);
+        const spellRequest = new SpellRequest();
+        spellRequest.setText(name);
 
-    await new Promise((resolve) => {
-        const spellResponse = greeter.spell(spellRequest);
-        spellResponse.on('data', (reply)=>{
-            logger.log('Received: ' + reply.getMessage())
+        await new Promise((resolve) => {
+            const spellResponse = greeter.spell(spellRequest);
+            spellResponse.on('data', (reply) => {
+                logger.log('Received: ' + reply.getMessage())
+            })
+            spellResponse.on('end', () => {
+                logger.log('Done!')
+                resolve(null)
+            })
         })
-        spellResponse.on('end', ()=>{
-            logger.log('Done!')
-            resolve(null)
-        })
-    })
+    } catch (e) {
+        if (e instanceof RpcError)
+            logger.log('!!! RPC Error: ' + e.message)
+    }
 }
